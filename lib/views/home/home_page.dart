@@ -71,32 +71,32 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                   physics: const NeverScrollableScrollPhysics(), controller: tabController, children: [
                 /// ALL BOOKS
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const BouncingScrollPhysics(),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, mainAxisSpacing: 15, crossAxisSpacing: 10, mainAxisExtent: 355),
+                        crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 0, mainAxisExtent: 386),
                     itemCount: 6,
                     itemBuilder: (context, index) {
                       return GestureDetector(onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BookDetails(purchased: false),));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  BookDetails(purchased: false),));
                       },child: bookTile());
                     },
                   ),
                 ),
                 /// PURCHASED BOOKS
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const BouncingScrollPhysics(),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, mainAxisSpacing: 15, crossAxisSpacing: 10, mainAxisExtent: 335),
+                        crossAxisCount: 2, mainAxisSpacing: 10, crossAxisSpacing: 0, mainAxisExtent: 350),
                     itemCount: 3,
                     itemBuilder: (context, index) {
                       return GestureDetector(onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BookDetails(purchased: true,),));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => BookDetails(purchased: true,),));
                       },child: bookTile());
                     },
                   ),
@@ -124,42 +124,51 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
 
   Widget bookTile(){
     return  Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          height: 245,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: const DecorationImage(image: AssetImage('assets/images/book 1.jpg'), fit: BoxFit.fill)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                height: 245,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: const DecorationImage(image: AssetImage('assets/images/book 1.jpg'), fit: BoxFit.fill)),
+              ),
+              const SizedBox(height: 4,),
+              Text(
+                "The fragile balance of Terror",
+                style: CustomTheme.lightTheme().textTheme.bodyMedium,
+                softWrap: true,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                'Narang and Scott D. Sagan',
+                style: CustomTheme.lightTheme().textTheme.bodySmall,
+                softWrap: true,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(
+                height: 6,
+              ),
+              purchased ? Container() : Container(
+                margin: const EdgeInsets.only(bottom: 10.0),
+                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(90), border: Border.all(color: CustomColor.bookDetails)),
+                child: Text("7,99 \u{20AC}",style: CustomTheme.lightTheme().textTheme.bodySmall!.copyWith(fontSize: 17),),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 4,),
-        Text(
-          "The fragile balance of Terror",
-          style: CustomTheme.lightTheme().textTheme.bodyMedium,
-          softWrap: true,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Text(
-          'Narang and Scott D. Sagan',
-          style: CustomTheme.lightTheme().textTheme.bodySmall,
-          softWrap: true,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(
-          height: 6,
-        ),
-        purchased ? Container() : Container(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(90), border: Border.all(color: CustomColor.bookDetails)),
-          child: Text("7,99 \u{20AC}",style: CustomTheme.lightTheme().textTheme.bodySmall!.copyWith(fontSize: 17),),
-        )
+        Divider(color: CustomColor.divider, thickness: 1.5)
       ],
     );
   }

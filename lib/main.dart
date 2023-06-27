@@ -5,8 +5,14 @@ import 'package:book_store/views/home/home_page.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = "pk_test_51NNbV3SEZPyeh5o4mqc8QUA2lT1BmRdxtktQUYORCicTUXf9xaGjggNo79OYAoFHBALmV8pfB9c2BSweACY1C1lJ00Ez774rfT";
+  await dotenv.load(fileName: "assets/.env");
+
   runApp(DevicePreview(
     // isToolbarVisible: true,
     builder: (context) => const InitApp(),
