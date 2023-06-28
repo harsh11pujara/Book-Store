@@ -1,7 +1,8 @@
 import 'package:book_store/themes/theme.dart';
+import 'package:book_store/views/authentication/login.dart';
 import 'package:flutter/material.dart';
 
-Widget accountPage(){
+Widget accountPage(BuildContext context){
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController contact = TextEditingController();
@@ -22,7 +23,9 @@ Widget accountPage(){
         TextField(controller: pass,obscureText: true,decoration: const InputDecoration(contentPadding: EdgeInsets.symmetric(vertical: 20)),),
         Expanded(child: Container(),),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginPage(),), (route) => false);
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
             decoration: BoxDecoration(

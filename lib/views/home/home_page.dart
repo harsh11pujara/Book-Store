@@ -105,7 +105,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
             )
           ],
         ),
-      ) : accountPage(),
+      ) : accountPage(context),
       bottomNavigationBar: BottomNavigationBar(
         selectedLabelStyle: const TextStyle(color: Colors.blue,fontSize: 14),
          unselectedLabelStyle: const TextStyle(color: Colors.black,fontSize: 14),

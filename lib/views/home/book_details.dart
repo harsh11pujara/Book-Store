@@ -17,10 +17,13 @@ class BookDetails extends StatelessWidget {
     return calculatedAmout.toString();
   }
 
-  Future<void> makePayment() async {
+  Future<void> makePayment(BuildContext context) async {
     try {
       //STEP 1: Create Payment Intent
-      paymentIntent = await createPaymentIntent('100', 'USD');
+      paymentIntent = await createPaymentIntent('5', 'INR');
+      print(paymentIntent);
+
+      var gpay = const PaymentSheetGooglePay(merchantCountryCode: 'IN',currencyCode: 'INR');
 
       //STEP 2: Initialize Payment Sheet
       await Stripe.instance
@@ -30,11 +33,16 @@ class BookDetails extends StatelessWidget {
               paymentIntentClientSecret: paymentIntent![
               'client_secret'], //Gotten from payment intent
               style: ThemeMode.light,
-              merchantDisplayName: 'Ikay'))
-          .then((value) {});
+              merchantDisplayName: 'Ikay',
+
+            googlePay: gpay
+          ))
+          .then((value) {
+            print("payment sheet initialise");
+      });
 
       //STEP 3: Display Payment sheet
-      displayPaymentSheet();
+      displayPaymentSheet(context);
     } catch (err) {
       throw Exception(err);
     }
@@ -46,6 +54,7 @@ class BookDetails extends StatelessWidget {
       Map<String, dynamic> body = {
         'amount': calculateAmount(amount),
         'currency': currency,
+        'payment_method_types[]': 'card'
       };
 
       //Make post request to Stripe
@@ -59,26 +68,48 @@ class BookDetails extends StatelessWidget {
       );
       return json.decode(response.body);
     } catch (err) {
+      print('err charging user: ${err.toString()}');
       throw Exception(err.toString());
     }
   }
 
-  displayPaymentSheet() async {
-    try {
-      await Stripe.instance.presentPaymentSheet().then((value) {
+  displayPaymentSheet(BuildContext context) async {
 
-        //Clear paymentIntent variable after successful payment
+    try {
+      await Stripe.instance.presentPaymentSheet(
+      ).then((value){
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: const [
+                      Icon(Icons.check_circle, color: Colors.green,),
+                      Text("Payment Successfull"),
+                    ],
+                  ),
+                ],
+              ),
+            ));
+        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
+
         paymentIntent = null;
 
-      })
-          .onError((error, stackTrace) {
-        throw Exception(error);
+      }).onError((error, stackTrace){
+        print('Error is:--->$error $stackTrace');
       });
-    }
-    on StripeException catch (e) {
+
+
+    } on StripeException catch (e) {
       print('Error is:---> $e');
-    }
-    catch (e) {
+      showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+            content: Text("Cancelled "),
+          ));
+    } catch (e) {
       print('$e');
     }
   }
@@ -152,7 +183,7 @@ class BookDetails extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => PDFViewer(),));
                   }else{
                     /// stripe payment
-                    await makePayment();
+                    await makePayment(context);
                   }
                 },
                 child: Container(
