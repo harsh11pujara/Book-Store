@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:book_store/views/authentication/login.dart';
 import 'package:book_store/views/home/home_page.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,12 +12,12 @@ Future<void> main() async {
   Stripe.publishableKey = "pk_test_51NNbV3SEZPyeh5o4mqc8QUA2lT1BmRdxtktQUYORCicTUXf9xaGjggNo79OYAoFHBALmV8pfB9c2BSweACY1C1lJ00Ez774rfT";
   await dotenv.load(fileName: "assets/.env");
 
-  runApp(DevicePreview(
-    // isToolbarVisible: true,
-    builder: (context) => const InitApp(),
-  ));
+  // runApp(DevicePreview(
+  //   // isToolbarVisible: true,
+  //   builder: (context) => const InitApp(),
+  // ));
 
-  // runApp(const InitApp());
+  runApp(const InitApp());
 }
 
 class InitApp extends StatelessWidget {
